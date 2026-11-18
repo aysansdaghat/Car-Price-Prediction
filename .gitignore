@@ -12,9 +12,8 @@ htmlcov/
 instance/
 .webassets-cache
 
-# Models (generated on first run)
-models/
-*.joblib
+# Trained models are committed so the deployed app starts instantly
+# (regenerate with: python train_models.py)
 
 # Environment
 .env

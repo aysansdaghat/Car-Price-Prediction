@@ -1,0 +1,62 @@
+{
+  "brands": [
+    "BMW",
+    "Hyundai",
+    "Iran Khodro",
+    "Kia",
+    "Mercedes-Benz",
+    "Saipa",
+    "Toyota"
+  ],
+  "models_by_brand": {
+    "BMW": [
+      "Series 3",
+      "Series 5"
+    ],
+    "Hyundai": [
+      "Accent",
+      "Elantra",
+      "Tucson"
+    ],
+    "Iran Khodro": [
+      "Dena",
+      "Peugeot 206",
+      "Runna",
+      "Samand"
+    ],
+    "Kia": [
+      "Cerato",
+      "Rio",
+      "Sportage"
+    ],
+    "Mercedes-Benz": [
+      "C-Class",
+      "E-Class"
+    ],
+    "Saipa": [
+      "Quick",
+      "Saina",
+      "Tiba"
+    ],
+    "Toyota": [
+      "Camry",
+      "Corolla",
+      "Yaris"
+    ]
+  },
+  "gearboxes": [
+    "Automatic",
+    "Manual"
+  ],
+  "fuel_types": [
+    "Diesel",
+    "Hybrid",
+    "Petrol"
+  ],
+  "conditions": [
+    "Damaged",
+    "Excellent",
+    "Fair",
+    "Good"
+  ]
+}

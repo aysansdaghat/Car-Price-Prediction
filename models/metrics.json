@@ -1,0 +1,74 @@
+{
+  "best_price_model": "Random Forest Regressor",
+  "best_class_model": "Random Forest",
+  "regression": [
+    {
+      "model": "Random Forest Regressor",
+      "rmse": 434863654.5288829,
+      "mae": 290330577.5613277,
+      "r2": 0.9300787920740802
+    },
+    {
+      "model": "Linear Regression",
+      "rmse": 552482401.4191496,
+      "mae": 386168549.2634165,
+      "r2": 0.8871401166068551
+    }
+  ],
+  "classification": [
+    {
+      "model": "Random Forest",
+      "accuracy": 0.9,
+      "f1": 0.8982097186700767
+    },
+    {
+      "model": "Decision Tree",
+      "accuracy": 0.85,
+      "f1": 0.8507092198581561
+    },
+    {
+      "model": "Gaussian Naive Bayes",
+      "accuracy": 0.7833333333333333,
+      "f1": 0.7703641456582633
+    }
+  ],
+  "rows": 300,
+  "brands": 7,
+  "models": 20,
+  "category_counts": {
+    "اقتصادی": 118,
+    "میان‌رده": 116,
+    "گران‌قیمت": 66
+  },
+  "brand_average": [
+    {
+      "brand": "Mercedes-Benz",
+      "price": 4818136363.636364
+    },
+    {
+      "brand": "BMW",
+      "price": 4618303030.30303
+    },
+    {
+      "brand": "Toyota",
+      "price": 2321604651.162791
+    },
+    {
+      "brand": "Kia",
+      "price": 2044694444.4444444
+    },
+    {
+      "brand": "Hyundai",
+      "price": 1933114285.7142856
+    },
+    {
+      "brand": "Iran Khodro",
+      "price": 784121212.1212121
+    },
+    {
+      "brand": "Saipa",
+      "price": 553769230.7692307
+    }
+  ],
+  "disclaimer": "داده‌های این پروژه مصنوعی و آموزشی هستند؛ قیمت‌ها قیمت قطعی بازار نیستند."
+}
