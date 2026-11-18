@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>هوش‌خودرو | داشبورد پیش‌بینی قیمت</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">AI</span>
+      <div><b>هوش‌خودرو</b><small>سامانه تحلیل و قیمت‌گذاری</small></div>
+    </div>
+    <div class="side-label">منوی اصلی</div>
+    <a class="nav active" href="#overview"><span>▦</span> نمای کلی</a>
+    <a class="nav" href="#predict"><span>⌕</span> پیش‌بینی قیمت</a>
+    <a class="nav" href="#analytics"><span>▥</span> تحلیل داده‌ها</a>
+    <a class="nav" href="#models"><span>◈</span> عملکرد مدل‌ها</a>
+    <a class="nav" href="#history"><span>◷</span> تاریخچه پیش‌بینی</a>
+    <a class="nav" href="#compare"><span>⇄</span> مقایسه خودروها</a>
+    <a class="nav" href="#filters"><span>⌕</span> فیلتر خودروها</a>
+    <div class="sidebar-bottom">
+      <div class="status-dot"></div>
+      <span>اتصال به مدل هوش مصنوعی فعال</span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">داشبورد هوشمند خودرو</div>
+        <h1>نمای کلی سامانه</h1>
+        <p>تحلیل داده‌ها و تخمین قیمت خودرو با یادگیری ماشین</p>
+      </div>
+      <div class="top-actions">
+        <span class="live"><i></i> سیستم آنلاین</span>
+        <button type="button" id="themeToggle" class="theme-toggle">🌙 حالت تاریک</button>
+        <div class="avatar">AI</div>
+      </div>
+    </header>
+
+    <section id="overview" class="stats-grid">
+      <article class="stat-card">
+        <div class="stat-icon purple">▤</div>
+        <span>تعداد داده‌های آموزشی</span>
+        <strong id="rowsCount">—</strong>
+        <small>رکورد پس از پاک‌سازی</small>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon blue">♧</div>
+        <span>برندهای خودرو</span>
+        <strong id="brandsCount">—</strong>
+        <small>برند موجود در دیتاست</small>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon mint">◎</div>
+        <span>دقت دسته‌بندی</span>
+        <strong id="accuracy">—</strong>
+        <small>بهترین مدل طبقه‌بندی</small>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon orange">↗</div>
+        <span>ضریب تعیین R²</span>
+        <strong id="r2">—</strong>
+        <small>بهترین مدل رگرسیون</small>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <article class="panel prediction-panel" id="predict">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">ابزار هوشمند</span>
+            <h2>پیش‌بینی قیمت خودرو</h2>
+            <p>مشخصات خودرو را وارد کنید تا مدل آموزش‌دیده قیمت را تخمین بزند.</p>
+          </div>
+          <span class="ai-chip">✦ AI Prediction</span>
+        </div>
+
+        <div class="vehicle-search">
+          <label for="vehicleSearch">جست‌وجوی سریع برند یا مدل خودرو</label>
+          <input id="vehicleSearch" type="search" list="vehicleSuggestions"
+                 placeholder="مثلاً Saipa — Quick" autocomplete="off">
+          <datalist id="vehicleSuggestions"></datalist>
+          <small>یک مورد را انتخاب کنید؛ برند و مدل در فرم پایین تنظیم می‌شوند.</small>
+        </div>
+
+        <form id="predictionForm">
+          <div class="form-grid">
+            <label>برند خودرو<select id="Brand" required></select></label>
+            <label>مدل خودرو<select id="Model" required></select></label>
+            <label>سال تولید<input id="Year" type="number" min="1390" max="1405" value="1402" required></label>
+            <label>کارکرد (کیلومتر)<input id="Mileage" type="number" min="0" value="45000" required></label>
+            <label>حجم موتور (لیتر)<input id="Engine_Size" type="number" min="0.5" max="8" step="0.1" value="1.6" required></label>
+            <label>نوع گیربکس<select id="Gearbox" required></select></label>
+            <label>نوع سوخت<select id="Fuel_Type" required></select></label>
+            <label>وضعیت بدنه<select id="Body_Condition" required></select></label>
+          </div>
+          <div class="form-footer">
+            <span class="form-hint">تمام فیلدها برای پیش‌بینی لازم هستند.</span>
+            <button id="predictBtn" type="submit"><span>✦</span> محاسبه قیمت هوشمند</button>
+          </div>
+        </form>
+
+        <div id="result" class="result-box hidden" aria-live="polite">
+          <div>
+            <span class="result-label">قیمت تخمینی خودرو</span>
+            <strong id="resultPrice">—</strong>
+            <small>تومان</small>
+          </div>
+          <div class="result-category">
+            <span>دسته‌بندی پیشنهادی</span>
+            <b id="resultCategory">—</b>
+          </div>
+          <p id="resultMeta"></p>
+        </div>
+        <div id="errorBox" class="error-box hidden"></div>
+
+        <section class="history-section" id="history">
+          <div class="history-heading">
+            <div>
+              <span class="eyebrow">سوابق محلی</span>
+              <h3>تاریخچه پیش‌بینی‌ها</h3>
+              <p>آخرین نتایج این مرورگر ذخیره می‌شوند.</p>
+            </div>
+            <button type="button" id="clearHistory" class="history-clear">پاک کردن سوابق</button>
+          </div>
+          <div id="historyList" class="history-list">
+            <div class="history-empty">هنوز پیش‌بینی‌ای ثبت نشده است.</div>
+          </div>
+        </section>
+      </article>
+
+      <article class="panel insight-panel" id="analytics">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">بینش داده‌ها</span>
+            <h2>میانگین قیمت بر اساس برند</h2>
+            <p>مقایسه میانگین قیمت برندهای موجود در دیتاست</p>
+          </div>
+          <span class="chart-icon">▥</span>
+        </div>
+        <div id="brandChart" class="bar-chart">
+          <div class="loading">در حال دریافت اطلاعات…</div>
+        </div>
+        <div class="chart-foot">
+          <span><i class="legend-dot"></i> میانگین قیمت (میلیارد تومان)</span>
+          <small>داده‌های آموزشی پروژه</small>
+        </div>
+      </article>
+    </section>
+
+    <section class="bottom-grid">
+      <article class="panel" id="models">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">ارزیابی الگوریتم‌ها</span>
+            <h2>مقایسه مدل‌های یادگیری ماشین</h2>
+          </div>
+        </div>
+        <h3 class="table-title">مدل‌های پیش‌بینی قیمت</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>مدل</th><th>RMSE</th><th>MAE</th><th>R²</th></tr></thead>
+            <tbody id="regressionRows"><tr><td colspan="4">در حال بارگذاری…</td></tr></tbody>
+          </table>
+        </div>
+        <h3 class="table-title second">مدل‌های دسته‌بندی قیمت</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>مدل</th><th>Accuracy</th><th>F1</th></tr></thead>
+            <tbody id="classificationRows"><tr><td colspan="3">در حال بارگذاری…</td></tr></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="panel category-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">توزیع داده‌ها</span>
+            <h2>گروه‌های قیمتی</h2>
+            <p>تعداد خودروها در هر گروه بر اساس قیمت ثبت‌شده</p>
+          </div>
+        </div>
+        <div id="categoryChart" class="category-chart"></div>
+        <div class="disclaimer">
+          <b>توجه مهم</b>
+          <p>داده‌های این پروژه به‌صورت مصنوعی و با هدف آموزشی تولید شده‌اند. نتایج صرفاً برای نمایش عملکرد مدل هستند و جایگزین قیمت‌گذاری کارشناسی بازار نیستند.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="extra-analytics-grid" aria-label="تحلیل‌های تکمیلی">
+      <article class="panel extra-chart-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">تحلیل زمانی</span>
+            <h2>رابطه سال تولید و میانگین قیمت</h2>
+            <p>میانگین قیمت خودروها در سال‌های مختلف دیتاست</p>
+          </div>
+          <span class="chart-icon">↗</span>
+        </div>
+        <div id="yearChart" class="extra-chart" aria-live="polite">
+          <div class="loading">در حال دریافت اطلاعات…</div>
+        </div>
+      </article>
+      <article class="panel extra-chart-panel">
+        <div class="panel-heading">
+          <div>
+            <span class="eyebrow">تحلیل کارکرد</span>
+            <h2>میانگین قیمت بر اساس کارکرد</h2>
+            <p>مقایسه میانگین قیمت و تعداد خودروها در بازه‌های کارکرد</p>
+          </div>
+          <span class="chart-icon">⌁</span>
+        </div>
+        <div id="mileageChart" class="extra-chart" aria-live="polite">
+          <div class="loading">در حال دریافت اطلاعات…</div>
+        </div>
+      </article>
+    </section>
+
+
+    <section class="tools-grid" aria-label="مقایسه و جست‌وجوی خودرو">
+      <article class="panel tool-panel" id="compare">
+        <div class="panel-heading"><div><span class="eyebrow">مقایسه هوشمند</span><h2>مقایسه دو خودرو</h2><p>دو نمونه از دیتاست را انتخاب کنید تا قیمت ثبت‌شده و قیمت تخمینی مدل کنار هم نمایش داده شوند.</p></div><span class="chart-icon">⇄</span></div>
+        <div class="compare-controls">
+          <label>خودروی اول<select id="compareFirst"><option value="">در حال دریافت…</option></select></label>
+          <label>خودروی دوم<select id="compareSecond"><option value="">در حال دریافت…</option></select></label>
+        </div>
+        <button type="button" class="tool-button" id="compareBtn">مقایسه خودروها</button>
+        <div id="compareResult" class="compare-result" aria-live="polite"><div class="history-empty">دو خودرو را انتخاب کنید.</div></div>
+      </article>
+      <article class="panel tool-panel" id="filters">
+        <div class="panel-heading"><div><span class="eyebrow">جست‌وجوی داده‌ها</span><h2>فیلتر و بررسی خودروها</h2><p>نمونه‌های دیتاست را بر اساس برند، سال، قیمت و کارکرد محدود کنید.</p></div><span class="chart-icon">⌕</span></div>
+        <div class="filter-grid">
+          <label>برند<select id="filterBrand"><option value="">همه برندها</option></select></label>
+          <label>از سال<input id="filterYearFrom" type="number" min="1390" max="1405" placeholder="مثلاً ۱۳۹۵"></label>
+          <label>تا سال<input id="filterYearTo" type="number" min="1390" max="1405" placeholder="مثلاً ۱۴۰۴"></label>
+          <label>حداقل قیمت (میلیارد تومان)<input id="filterPriceMin" type="number" min="0" step="0.1" placeholder="بدون محدودیت"></label>
+          <label>حداکثر قیمت (میلیارد تومان)<input id="filterPriceMax" type="number" min="0" step="0.1" placeholder="بدون محدودیت"></label>
+          <label>حداکثر کارکرد (کیلومتر)<input id="filterMileage" type="number" min="0" placeholder="بدون محدودیت"></label>
+          <label class="filter-search">جست‌وجوی برند یا مدل<input id="filterQuery" type="search" placeholder="مثلاً Toyota یا Corolla"></label>
+        </div>
+        <div class="filter-actions"><button type="button" class="tool-button" id="applyFilters">اعمال فیلترها</button><button type="button" class="tool-button secondary" id="resetFilters">پاک کردن فیلترها</button><span id="filterCount" class="filter-count"></span></div>
+        <div class="table-wrap filter-table-wrap"><table><thead><tr><th>خودرو</th><th>سال</th><th>کارکرد</th><th>قیمت دیتاست</th><th>عملیات</th></tr></thead><tbody id="vehicleRows"><tr><td colspan="5">در حال دریافت اطلاعات…</td></tr></tbody></table></div>
+      </article>
+    </section>
+    <footer>
+      © ۱۴۰۵ سامانه هوشمند پیش‌بینی قیمت خودرو
+      <span>ساخته‌شده با Python و Machine Learning</span>
+    </footer>
+  </main>
+</div>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
